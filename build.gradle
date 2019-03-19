@@ -1,0 +1,31 @@
+plugins {
+    // Apply the java plugin to add support for Java
+    id 'java'
+
+    // Apply the application plugin to add support for building an application
+    id 'application'
+}
+
+repositories {
+    jcenter()
+    // Molr Repo
+    maven { url "https://dl.bintray.com/molr/molr-repo" }
+}
+
+dependencies {
+    compile group: 'io.molr', name: 'molr-mole-core', version: '0.2.1'
+
+    testImplementation 'junit:junit:4.12'
+}
+
+// Define the main class for the application
+mainClassName = 'hello.app.App'
+
+task createJar(type: Jar) {
+    manifest {
+        attributes 'Main-Class': mainClassName
+    }
+    baseName = project.name + '-all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
